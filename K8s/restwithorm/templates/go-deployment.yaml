@@ -1,0 +1,32 @@
+---
+kind: Deployment
+
+spec:
+  
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 15
+      containers:
+      - name: go-restfull-orm-app
+        imagePullPolicy: Never
+        image: vikram/go-restful-orm
+        lifecycle:
+          preStop:
+            httpGet:
+              path: "/api/exit"
+              port: 9191
+         
+        ports:
+        - containerPort: 9191
+    metadata:
+      labels:
+        app: go-restfull-orm-app
+  selector:
+    matchLabels:
+      app: go-restfull-orm-app
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: go-restfull-orm-app
+  name: go-restfull-orm-app
